@@ -38,3 +38,5 @@ better understand what's happening inside during data replication/distribution.
 - `infispector start`
 
 - then you can access app locally at: http://localhost:8080/
+
+[![Build Status](https://travis-ci.org/VratislavHais/infispector.svg?branch=master)](https://travis-ci.org/VratislavHais/infispector)

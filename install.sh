@@ -23,6 +23,37 @@ downloadMaven() {
 	source ~/.bashrc
 }
 
+vercomp () {
+    if [[ $1 == $2 ]]
+    then
+        return 0
+    fi
+    local IFS=.
+    local i ver1=($1) ver2=($2)
+    # fill empty fields in ver1 with zeros
+    for ((i=${#ver1[@]}; i<${#ver2[@]}; i++))
+    do
+        ver1[i]=0
+    done
+    for ((i=0; i<${#ver1[@]}; i++))
+    do
+        if [[ -z ${ver2[i]} ]]
+        then
+            # fill empty fields in ver2 with zeros
+            ver2[i]=0
+        fi
+        if ((10#${ver1[i]} > 10#${ver2[i]}))
+        then
+            return 1
+        fi
+        if ((10#${ver1[i]} < 10#${ver2[i]}))
+        then
+            return 2
+        fi
+    done
+    return 0
+}
+
 #colors
 RED='\033[0;31m'
 NC='\033[0m'		#normal color
@@ -34,9 +65,20 @@ URL_DRUID="http://static.druid.io/artifacts/releases/druid-0.8.3-bin.tar.gz"
 URL_KAFKA="https://archive.apache.org/dist/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz"
 URL_MAVEN="http://mirror.hosting90.cz/apache/maven/maven-3/3.5.2/binaries/apache-maven-3.5.2-bin.tar.gz"
 
+#versions
+WGET_VERSION=`wget --version | head -n 1 | sed 's/[^0-9\.]*//g'`
+
 if [[ $EUID -eq 0 ]]
 then
 	printf "Please, run this script as a ${WHITE}superuser${NC}, not root.\n" >&2
+	exit 1
+fi
+
+vercomp $WGET_VERSION "1.16"
+
+if [ $? -eq 2 ]
+then
+	printf "Version of wget must be greater than 1.16 to run this script.\n" >&2
 	exit 1
 fi
 
@@ -91,6 +133,7 @@ then
 		/bin/rm -rf kafka_2.10-0.8.2.0.tgz > /dev/null
 		chmod +x $HOME/kafka_2.10-0.8.2.0/bin/*.sh
 	else
+171 then
 		printf "Kafka download failed\n" >&2
 	fi
 else
@@ -139,15 +182,22 @@ fi
 cd $infispector_location
 
 #check if npm is installed
-npm --version > /dev/null
+NPM_VERSION=`npm --version`
+
 #npm install
-npm config set loglevel warn
 if [ $? -ne 0 ]
 then
 	printf "${RED}npm is required${NC}"
 	printf "Please install npm and run this script again\n" >&2
 	exit 1
 else
+	vercomp $NPM_VERSION "3.0"
+	if [ $? -eq 2 ]
+	then
+		printf "npm version greater than 3.0 is required. Please update your npm and run this script again.\n" >&2
+		exit 1
+	fi
+	npm config set loglevel warn
 	echo -n "npm install ...."
 	npm -s install 2> $infispector_location/npm_err.log > /dev/null
 	if [ $? -eq 0 ]
@@ -189,7 +239,7 @@ then
 fi
 printf "mvn install ...."
 cd $infispector_location/infinispan_example_app/
-mvn -q clean install 2> $infispector_location/mvn_err.log
+$M2_HOME/bin/mvn -q clean install 2> $infispector_location/mvn_err.log
 if [ $? -eq 0 ]
 then
 	printf " ${GREEN}OK${NC}\n"

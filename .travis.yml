@@ -1,7 +1,6 @@
 language: node_js
 sudo: required
 before_install:
-        - 'if [[ `npm -v` != 3* ]]; then npm i -g npm@3; fi'
         - wget "http://static.druid.io/artifacts/releases/druid-0.8.3-bin.tar.gz"
         - tar -zxvf druid-0.8.3-bin.tar.gz
         - wget "https://archive.apache.org/dist/kafka/0.8.2.0/kafka_2.10-0.8.2.0.tgz"
@@ -15,3 +14,5 @@ script:
         - ./infispector.sh nodes
         - ./testFunctionality.sh
         - npm --harmony test
+notifications:
+        email: false
