@@ -8,7 +8,7 @@
   "framework": "Express, Angular",
   "dependencies": {
     "xregexp": "1.5.1",
-    "plywood-druid-requester": "1.5.3",
+    "plywood-druid-requester": "1.5.9",
     "express": "3.0.0",
     "ejs": ">= 0.8.3",
     "es6-promise": ">= 3.2.1",
@@ -36,7 +36,7 @@
     "grunt-contrib-uglify": "~0.1.1",
     "grunt-contrib-watch": "~0.3.1",
     "grunt-karma": "~0.4.4",
-    "grunt-nodemon": "^0.4.0",
+    "grunt-nodemon": "0.4.0",
     "grunt-processhtml": "~0.2.7",
     "grunt-shell": "^1.1.2",
     "load-grunt-tasks": "^3.1.0"

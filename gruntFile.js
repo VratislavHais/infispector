@@ -12,6 +12,7 @@
   grunt.loadNpmTasks('grunt-processhtml');
   grunt.loadNpmTasks('grunt-shell'); // npm install grunt-nodemon --save-dev
   grunt.loadNpmTasks('grunt-concurrent'); // npm install --save-dev grunt-concurrent
+  grunt.loadNpmTasks('grunt-nodemon');
 
   grunt.registerTask('default', ['jshint','build','concurrent:target' /*.,'karma:unit'*/]);
   grunt.registerTask('build', ['clean','concat:dev','copy','processhtml:dev']);

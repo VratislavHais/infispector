@@ -7,6 +7,7 @@ var nodes;
 describe("Get nodes", function() {
     beforeEach(function(done) {
         request.post(base_url + "getNodes", null, function(err, resp, body) {
+            console.log(body);
             body = JSON.parse(body);
             nodes = body.jsonResponseAsString.replace("[", "").replace("]","").replace(new RegExp("\"","g"), "").split(",");
             if (nodes[0] === "null") {
@@ -32,6 +33,7 @@ describe("Get info about messages", function() {
                 form: {"nodeName" : nodes[0], "filter" : "StateResponseCommand"}
             },
             function(err, resp, body) {
+                console.log(body);
                 body = JSON.parse(body);
                 message = JSON.parse(body.jsonResponseAsString);
                 message = message[0].result[0];

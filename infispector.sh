@@ -176,9 +176,19 @@ then
 	do
 		if [ $cnt -eq $[$DEFAULT - 1] ]
 		then
-			mvn exec:exec > /dev/null
+			if echo $INFISPECTOR_LOCATION | grep travis > /dev/null
+			then
+				mvn exec:exec -q
+			else
+				mvn exec:exec > /dev/null
+			fi
 		else
-			nohup mvn exec:exec > /dev/null 2> /dev/null &
+			if echo $INFISPECTOR_LOCATION | grep travis > /dev/null
+			then
+				mvn exec:exec -q
+			else
+				mvn exec:exec > /dev/null &
+			fi
 		fi
 		cnt=$[$cnt + 1]
 	done
